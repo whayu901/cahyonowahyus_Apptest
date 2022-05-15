@@ -1,15 +1,28 @@
 import * as React from "react";
-import { View, Text } from "react-native";
+import { LogBox } from "react-native";
 import { Provider as PaperProvider } from "react-native-paper";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
-import { TYPHOGRAPHY } from "./src/config";
+import Navigator from "./src/navigation";
+import { persistor, store } from "./src/redux/store";
 
-export default function Main() {
+LogBox.ignoreLogs(["Warning: ..."]);
+LogBox.ignoreLogs([
+  "Non-serializable values were found in the navigation state",
+]);
+LogBox.ignoreAllLogs(true);
+
+const App = () => {
   return (
-    <PaperProvider>
-      <View>
-        <Text style={{ ...TYPHOGRAPHY.GothamRegular }}>Hello world</Text>
-      </View>
-    </PaperProvider>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <PaperProvider>
+          <Navigator />
+        </PaperProvider>
+      </PersistGate>
+    </Provider>
   );
-}
+};
+
+export default App;
