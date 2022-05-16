@@ -39,12 +39,12 @@ const typhoGraphy = StyleSheet.create({
   },
   GothamLarge: {
     fontFamily: FONTS.GothamMedium,
-    fontSize: RFPercentage(3.9),
+    fontSize: RFPercentage(4.2),
     color: COLORS.black.main,
   },
   GothamLargeBold: {
     fontFamily: FONTS.GothamBold,
-    fontSize: RFPercentage(3.9),
+    fontSize: RFPercentage(4.2),
     color: COLORS.black.main,
   },
 });

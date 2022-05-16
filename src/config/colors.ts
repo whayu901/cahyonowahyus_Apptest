@@ -1,6 +1,7 @@
 const Colors = {
   green: {
-    main: "#A8EAD5",
+    light: "#A8EAD5",
+    main: "#3ED598",
   },
   orange: {
     main: "#FFC542",
@@ -9,7 +10,7 @@ const Colors = {
   grey: {
     contrast: "#EAEAEB",
     main: "#F5F5F5",
-    light: "#FDFAF3",
+    light: "#f2f2f2",
     lighter: "#F5F5F7",
   },
   black: {
@@ -21,7 +22,7 @@ const Colors = {
     main: "#fff",
   },
   blue: {
-    main: "#088F98",
+    main: "#84C2E3",
   },
   red: {
     lighter: "#EA7276",
