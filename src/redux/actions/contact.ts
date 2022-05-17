@@ -5,7 +5,7 @@ import { Dispatch, GetState } from "../types";
 interface Parameters {
   data?: any;
   callback?: any;
-  id?: string;
+  email?: string;
   callbackError?: any;
 }
 
@@ -36,3 +36,23 @@ export const getContact = () => async (dispatch: Dispatch) => {
     });
   }
 };
+
+export const deleteContact =
+  ({ email }: Parameters) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: "DELETE_CONTACT_PENDING" });
+
+      dispatch({
+        type: "DELETE_CONTACT_SUCCESS",
+        payload: {
+          email,
+        },
+      });
+    } catch (error) {
+      dispatch({
+        type: "DELETE_CONTACT_ERROR",
+        payload: { error: "Something with our server !" },
+      });
+    }
+  };

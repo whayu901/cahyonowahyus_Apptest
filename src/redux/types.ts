@@ -1,6 +1,7 @@
 interface Payload {
   data?: any;
   error?: any;
+  email?: string;
 }
 
 interface Params {

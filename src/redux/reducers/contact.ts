@@ -51,6 +51,42 @@ export default (state = initialState, { type, payload }: Action) => {
         },
       };
     }
+    case "DELETE_CONTACT_PENDING": {
+      return {
+        ...state,
+        deleteContact: {
+          ...state.deleteContact,
+          isLoading: true,
+        },
+      };
+    }
+    case "DELETE_CONTACT_SUCCESS": {
+      return {
+        ...state,
+        deleteContact: {
+          ...state.deleteContact,
+          isLoading: false,
+          data: payload?.data,
+        },
+        listContact: {
+          ...state.listContact,
+          isLoading: false,
+          data: state.listContact.data.filter(
+            item => item.email !== payload?.email,
+          ),
+        },
+      };
+    }
+    case "DELETE_CONTACT_ERROR": {
+      return {
+        ...state,
+        deleteContact: {
+          ...state.deleteContact,
+          isLoading: false,
+          error: payload?.error,
+        },
+      };
+    }
     default:
       return state;
   }
