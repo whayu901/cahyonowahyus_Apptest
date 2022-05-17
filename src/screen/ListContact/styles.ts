@@ -9,6 +9,13 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 10,
   },
+  fab: {
+    position: "absolute",
+    margin: 16,
+    right: 0,
+    bottom: 0,
+    zIndex: 99,
+  },
 });
 
 export default styles;

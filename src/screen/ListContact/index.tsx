@@ -1,15 +1,14 @@
 import React from "react";
 import { View, SafeAreaView, Text, Image, FlatList } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Button } from "react-native-paper";
+import { Button, FAB } from "react-native-paper";
 import Modal from "react-native-modal";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 
 import { Reducers } from "../../redux/types";
-import { getContact } from "../../redux/actions";
-import { CardList } from "../../component/molecul";
+import { getContact, deleteContact } from "../../redux/actions";
+import { CardList, ModalConfirmation } from "../../component/molecul";
 import { LoadingList } from "../../component/atom";
 import { COLORS, TYPHOGRAPHY } from "../../config";
 import { RFPercentage } from "../../utils";
@@ -19,16 +18,18 @@ import styles from "./styles";
 const ListContact = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const surveyState = useSelector((state: Reducers) => state.contact);
+  const contactState = useSelector((state: Reducers) => state.contact);
 
   const [isModalDetail, setModalDetail] = React.useState<boolean>(false);
   const [dataSelected, setDataSelected] = React.useState<any>(null);
+  const [isModalConfirmation, setModalConfirmation] =
+    React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (surveyState.listContact.data.length === 0) {
+    if (contactState.listContact.data.length === 0) {
       dispatch<any>(getContact());
     }
-  }, [dispatch, surveyState.listContact.data.length]);
+  }, [dispatch, contactState.listContact.data.length]);
 
   const _renderItem = React.useCallback(
     ({ item }: { item: any }) => (
@@ -67,11 +68,28 @@ const ListContact = () => {
     [],
   );
 
+  const _deleteContact = React.useCallback(() => {
+    dispatch<any>(
+      deleteContact({
+        email: dataSelected?.email,
+        callback: () => {
+          setModalConfirmation(false);
+          setModalDetail(false);
+        },
+      }),
+    );
+  }, [dataSelected?.email, dispatch]);
+
   return (
     <SafeAreaView>
-      {/* Modal for methode pick profile image */}
+      <FAB
+        icon="plus"
+        style={styles.fab}
+        label="Add Contact"
+        onPress={() => navigation.navigate("AddContact" as never)}
+      />
 
-      {surveyState?.listContact?.isLoading ? (
+      {contactState?.listContact?.isLoading ? (
         <View
           style={{
             marginVertical: RFPercentage(2),
@@ -81,13 +99,26 @@ const ListContact = () => {
         </View>
       ) : (
         <FlatList
-          data={surveyState?.listContact?.data}
+          data={contactState?.listContact?.data}
           renderItem={_renderItem}
           ListEmptyComponent={_noSurvey}
           keyExtractor={(item, index) => String(index)}
         />
       )}
 
+      {/* Modal Confirmation delete */}
+      <ModalConfirmation
+        isVisible={isModalConfirmation}
+        typeButton="contained"
+        message={`Are you sure delete ${dataSelected?.name}`}
+        textButton="Delete"
+        textButtonNegatif="Cancel"
+        onDismis={_deleteContact}
+        isConfirmation
+        onDismissNegatif={() => setModalConfirmation(false)}
+      />
+
+      {/* Modal Detail */}
       <Modal
         isVisible={isModalDetail}
         animationIn="fadeInUp"
@@ -162,12 +193,21 @@ const ListContact = () => {
             <Button
               mode="text"
               color={COLORS.white.main}
-              onPress={() => navigation.navigate("UpdateContact" as never)}>
+              onPress={() => {
+                navigation.navigate(
+                  "UpdateContact" as never,
+                  {
+                    data: dataSelected,
+                  } as never,
+                );
+                setModalDetail(false);
+              }}>
               Edit Contact
             </Button>
             <Button
               mode="contained"
               style={{ marginVertical: 10 }}
+              onPress={() => setModalConfirmation(true)}
               color={COLORS.red.main}>
               Delete Contact
             </Button>

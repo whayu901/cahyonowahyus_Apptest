@@ -87,6 +87,84 @@ export default (state = initialState, { type, payload }: Action) => {
         },
       };
     }
+    case "UPDATE_CONTACT_PENDING": {
+      return {
+        ...state,
+        updateContact: {
+          ...state.updateContact,
+          isLoading: true,
+        },
+      };
+    }
+    case "UPDATE_CONTACT_SUCCESS": {
+      const tempUsers = [...state.listContact.data];
+      const newUsers = tempUsers.map((item, index) => {
+        if (item.email !== payload?.data.email) {
+          return item;
+        }
+        if (item.email === payload?.data.email) {
+          return payload?.data;
+        }
+      });
+      return {
+        ...state,
+        updateContact: {
+          ...state.updateContact,
+          isLoading: false,
+          data: payload?.data,
+        },
+        listContact: {
+          ...state.listContact,
+          isLoading: false,
+          data: newUsers,
+        },
+      };
+    }
+    case "UPDATE_CONTACT_ERROR": {
+      return {
+        ...state,
+        updateContact: {
+          ...state.updateContact,
+          isLoading: false,
+          error: payload?.error,
+        },
+      };
+    }
+    case "ADD_CONTACT_PENDING": {
+      return {
+        ...state,
+        addContact: {
+          ...state.addContact,
+          isLoading: true,
+        },
+      };
+    }
+    case "ADD_CONTACT_SUCCESS": {
+      const newUsers = [...state.listContact.data, payload?.data];
+      return {
+        ...state,
+        addContact: {
+          ...state.addContact,
+          isLoading: false,
+          data: payload?.data,
+        },
+        listContact: {
+          ...state.listContact,
+          isLoading: false,
+          data: newUsers,
+        },
+      };
+    }
+    case "ADD_CONTACT_ERROR": {
+      return {
+        ...state,
+        addContact: {
+          ...state.addContact,
+          isLoading: false,
+          error: payload?.error,
+        },
+      };
+    }
     default:
       return state;
   }

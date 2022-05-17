@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { Dispatch, GetState } from "../types";
+import { Dispatch } from "../types";
 
 interface Parameters {
   data?: any;
@@ -38,7 +38,7 @@ export const getContact = () => async (dispatch: Dispatch) => {
 };
 
 export const deleteContact =
-  ({ email }: Parameters) =>
+  ({ email, callback }: Parameters) =>
   async (dispatch: Dispatch) => {
     try {
       dispatch({ type: "DELETE_CONTACT_PENDING" });
@@ -49,9 +49,58 @@ export const deleteContact =
           email,
         },
       });
+      if (callback) {
+        callback();
+      }
     } catch (error) {
       dispatch({
         type: "DELETE_CONTACT_ERROR",
+        payload: { error: "Something with our server !" },
+      });
+    }
+  };
+
+export const updateContact =
+  ({ data, callback }: Parameters) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: "UPDATE_CONTACT_PENDING" });
+
+      dispatch({
+        type: "UPDATE_CONTACT_SUCCESS",
+        payload: {
+          data,
+        },
+      });
+      if (callback) {
+        callback();
+      }
+    } catch (error) {
+      dispatch({
+        type: "UPDATE_CONTACT_ERROR",
+        payload: { error: "Something with our server !" },
+      });
+    }
+  };
+
+export const addContact =
+  ({ data, callback }: Parameters) =>
+  async (dispatch: Dispatch) => {
+    try {
+      dispatch({ type: "ADD_CONTACT_PENDING" });
+
+      dispatch({
+        type: "ADD_CONTACT_SUCCESS",
+        payload: {
+          data,
+        },
+      });
+      if (callback) {
+        callback();
+      }
+    } catch (error) {
+      dispatch({
+        type: "ADD_CONTACT_ERROR",
         payload: { error: "Something with our server !" },
       });
     }

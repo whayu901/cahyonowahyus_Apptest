@@ -57,7 +57,7 @@ const Input = ({
         }}>
         <Text
           style={{
-            fontSize: RFPercentage(2.3),
+            fontSize: RFPercentage(3.2),
             color: isError
               ? COLORS.red.lighter
               : focus
