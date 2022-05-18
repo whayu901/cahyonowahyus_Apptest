@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     margin: 16,
     right: 0,
     bottom: 0,
-    zIndex: 1000,
+    zIndex: 1,
   },
   header: {
     justifyContent: "center",
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 70,
+    height: 115,
     backgroundColor: COLORS.blue.main,
     zIndex: 1000,
     elevation: 1000,

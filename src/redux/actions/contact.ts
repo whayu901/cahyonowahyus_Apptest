@@ -7,6 +7,7 @@ interface Parameters {
   callback?: any;
   email?: string;
   callbackError?: any;
+  text?: string;
 }
 
 export const getContact = () => async (dispatch: Dispatch) => {
@@ -104,4 +105,15 @@ export const addContact =
         payload: { error: "Something with our server !" },
       });
     }
+  };
+
+export const searchContact =
+  ({ text }: Parameters) =>
+  (dispatch: Dispatch) => {
+    dispatch({
+      type: "SEARCH_CONTACT_SUCCESS",
+      payload: {
+        text,
+      },
+    });
   };

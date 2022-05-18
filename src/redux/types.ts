@@ -2,6 +2,7 @@ interface Payload {
   data?: any;
   error?: any;
   email?: string;
+  text?: string;
 }
 
 interface Params {
@@ -25,6 +26,7 @@ export interface Reducers {
 export interface ContactState {
   listContact: {
     data: any[];
+    dataTemp: any[];
     isLoading: boolean;
     error: string;
   };

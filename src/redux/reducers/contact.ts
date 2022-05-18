@@ -3,6 +3,7 @@ import { Action, ContactState } from "../types";
 const initialState: ContactState = {
   listContact: {
     data: [],
+    dataTemp: [],
     isLoading: false,
     error: "",
   },
@@ -38,6 +39,7 @@ export default (state = initialState, { type, payload }: Action) => {
           ...state.listContact,
           isLoading: false,
           data: payload?.data,
+          dataTemp: payload?.data,
         },
       };
     }
@@ -162,6 +164,20 @@ export default (state = initialState, { type, payload }: Action) => {
           ...state.addContact,
           isLoading: false,
           error: payload?.error,
+        },
+      };
+    }
+    case "SEARCH_CONTACT_SUCCESS": {
+      const newUsers: any[] = state.listContact.data.filter(val => {
+        return val?.name.toLowerCase().includes(payload?.text?.toLowerCase());
+      });
+
+      return {
+        ...state,
+        listContact: {
+          ...state.listContact,
+          isLoading: false,
+          data: payload?.text === "" ? state.listContact.dataTemp : newUsers,
         },
       };
     }

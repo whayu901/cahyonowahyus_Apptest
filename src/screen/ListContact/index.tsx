@@ -9,13 +9,14 @@ import {
   UIManager,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, FAB } from "react-native-paper";
+import { Button, FAB, Searchbar } from "react-native-paper";
 import Modal from "react-native-modal";
 import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import dayjs from "dayjs";
 
 import { Reducers } from "../../redux/types";
-import { getContact, deleteContact } from "../../redux/actions";
+import { getContact, deleteContact, searchContact } from "../../redux/actions";
 import { CardList, ModalConfirmation } from "../../component/molecul";
 import { LoadingList } from "../../component/atom";
 import { COLORS, TYPHOGRAPHY } from "../../config";
@@ -40,12 +41,18 @@ const ListContact = () => {
   const [dataSelected, setDataSelected] = React.useState<any>(null);
   const [isModalConfirmation, setModalConfirmation] =
     React.useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = React.useState<string>("");
 
   React.useEffect(() => {
+    _callData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const _callData = React.useCallback(() => {
     if (contactState.listContact.data.length === 0) {
       dispatch<any>(getContact());
     }
-  }, [dispatch, contactState.listContact.data.length]);
+  }, [contactState.listContact.data.length, dispatch]);
 
   const _renderItem = React.useCallback(
     ({ item }: { item: any }) => (
@@ -68,18 +75,23 @@ const ListContact = () => {
 
   const _noSurvey = React.useCallback(
     () => (
-      <View
-        style={{
-          marginTop: RFPercentage(4),
-        }}>
-        <Text
+      <KeyboardAwareScrollView
+        enableOnAndroid={true}
+        keyboardShouldPersistTaps={"handled"}
+        enableResetScrollToCoords={false}>
+        <View
           style={{
-            ...TYPHOGRAPHY.GothamRegularBold,
-            textAlign: "center",
+            marginTop: RFPercentage(4),
           }}>
-          User Not Found
-        </Text>
-      </View>
+          <Text
+            style={{
+              ...TYPHOGRAPHY.GothamRegularBold,
+              textAlign: "center",
+            }}>
+            User Not Found
+          </Text>
+        </View>
+      </KeyboardAwareScrollView>
     ),
     [],
   );
@@ -96,17 +108,20 @@ const ListContact = () => {
     );
   }, [dataSelected?.email, dispatch]);
 
+  const onChangeSearch = (query: any) => {
+    // const tempData = null;
+    // contactState?.listContact?.data.filter((val: any) => {
+    //   if (val.name.toLowerCase().includes(query.toLowerCase())) {
+    //     console.log("ada bro");
+    //   }
+    // });
+
+    setSearchQuery(query);
+    dispatch<any>(searchContact({ text: query }));
+  };
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      {showButton && (
-        <FAB
-          icon="plus"
-          style={styles.fab}
-          label="Add Contact"
-          onPress={() => navigation.navigate("AddContact" as never)}
-        />
-      )}
-
       {showButton && (
         <View style={styles.header}>
           <View style={{ marginHorizontal: 10 }}>
@@ -122,7 +137,24 @@ const ListContact = () => {
               You Can Edit, Delete, Update your contact
             </Text>
           </View>
+
+          <View style={{ margin: 10 }}>
+            <Searchbar
+              placeholder="Search"
+              onChangeText={onChangeSearch}
+              value={searchQuery}
+            />
+          </View>
         </View>
+      )}
+
+      {showButton && (
+        <FAB
+          icon="plus"
+          style={styles.fab}
+          label="Add Contact"
+          onPress={() => navigation.navigate("AddContact" as never)}
+        />
       )}
 
       {contactState?.listContact?.isLoading ? (
@@ -137,7 +169,7 @@ const ListContact = () => {
         <FlatList
           data={contactState?.listContact?.data}
           renderItem={_renderItem}
-          contentContainerStyle={{ zIndex: 1, paddingTop: 70 }}
+          contentContainerStyle={{ paddingTop: 115 }}
           onScroll={handleScroll}
           ListEmptyComponent={_noSurvey}
           keyExtractor={(_, index) => String(index)}
