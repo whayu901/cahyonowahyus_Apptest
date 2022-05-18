@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Button } from "react-native-paper";
@@ -47,19 +48,25 @@ const AddContact = () => {
   const [visibleModalSuccess, setVisibleModalSuccess] =
     React.useState<boolean>(false);
   const [photo, setPhoto] = React.useState<any>(null);
+  const [emptyPhoto, setEmptyPhoto] = React.useState<string>("");
 
   const _addContact = React.useCallback(
     (value: any) => {
-      value.photo = photo;
+      if (photo === null) {
+        setEmptyPhoto("Please add photo");
+      } else {
+        setEmptyPhoto("");
+        value.photo = photo;
 
-      dispatch<any>(
-        addContact({
-          data: value,
-          callback: () => {
-            setVisibleModalSuccess(true);
-          },
-        }),
-      );
+        dispatch<any>(
+          addContact({
+            data: value,
+            callback: () => {
+              setVisibleModalSuccess(true);
+            },
+          }),
+        );
+      }
     },
     [dispatch, photo],
   );
@@ -89,155 +96,168 @@ const AddContact = () => {
   }, []);
 
   return (
-    <SafeAreaView style={{ marginHorizontal: 10 }}>
+    <SafeAreaView style={{ marginHorizontal: 10, flex: 1 }}>
       <HeaderGeneral
         title={"Add Contact"}
         onPress={() => navigation.goBack()}
       />
-      <Formik
-        initialValues={form}
-        validationSchema={validationUpdateContact}
-        onSubmit={(e: any) => _addContact(e)}
-        enableReinitialize>
-        {({
-          values,
-          errors,
-          setFieldTouched,
-          handleChange,
-          touched,
-          handleSubmit,
-          setFieldValue,
-        }) => (
-          <>
-            <KeyboardAwareScrollView
-              enableOnAndroid={true}
-              keyboardShouldPersistTaps={"handled"}
-              enableResetScrollToCoords={false}>
-              <View>
-                <TouchableOpacity
-                  style={{ alignSelf: "center" }}
-                  onPress={_openGallery}>
-                  <Image
-                    style={styles.imageProfile}
-                    source={{
-                      uri:
-                        photo !== null
-                          ? photo
-                          : // eslint-disable-next-line max-len
-                            "https://images.pexels.com/photos/62693/pexels-photo-62693.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
-                    }}
+      <ScrollView>
+        <Formik
+          initialValues={form}
+          validationSchema={validationUpdateContact}
+          onSubmit={(e: any) => _addContact(e)}
+          enableReinitialize>
+          {({
+            values,
+            errors,
+            setFieldTouched,
+            handleChange,
+            touched,
+            handleSubmit,
+            setFieldValue,
+          }) => (
+            <>
+              <KeyboardAwareScrollView
+                enableOnAndroid={true}
+                keyboardShouldPersistTaps={"handled"}
+                enableResetScrollToCoords={false}>
+                <View>
+                  <TouchableOpacity
+                    style={{ alignSelf: "center" }}
+                    onPress={_openGallery}>
+                    <Image
+                      style={styles.imageProfile}
+                      source={{
+                        uri:
+                          photo !== null
+                            ? photo
+                            : // eslint-disable-next-line max-len
+                              "https://images.pexels.com/photos/62693/pexels-photo-62693.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+                      }}
+                    />
+                    <View style={{ position: "absolute", bottom: 0, right: 0 }}>
+                      <Icon name="camera" size={RFPercentage(4)} />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{ marginVertical: 5 }}>
+                  <TextInput
+                    label="FullName"
+                    value={values?.name}
+                    placeholder="Insert name"
+                    isError={touched.name && errors.name}
+                    onBlur={() => setFieldTouched("name")}
+                    onChangeText={handleChange("name")}
                   />
-                  <View style={{ position: "absolute", bottom: 0, right: 0 }}>
-                    <Icon name="camera" size={RFPercentage(4)} />
-                  </View>
-                </TouchableOpacity>
-              </View>
+                  {touched.name && errors.name && (
+                    <Text
+                      style={{
+                        ...TYPHOGRAPHY.GothamLight,
+                        color: COLORS.red.lighter,
+                        marginTop: 5,
+                      }}>
+                      {errors.name}
+                    </Text>
+                  )}
+                </View>
 
-              <View style={{ marginVertical: 5 }}>
-                <TextInput
-                  label="FullName"
-                  value={values?.name}
-                  placeholder="Insert name"
-                  isError={touched.name && errors.name}
-                  onBlur={() => setFieldTouched("name")}
-                  onChangeText={handleChange("name")}
-                />
-                {touched.name && errors.name && (
-                  <Text
-                    style={{
-                      ...TYPHOGRAPHY.GothamLight,
-                      color: COLORS.red.lighter,
-                      marginTop: 5,
-                    }}>
-                    {errors.name}
-                  </Text>
-                )}
-              </View>
+                <View style={{ marginVertical: 5 }}>
+                  <TextInput
+                    label="Email"
+                    value={values?.email}
+                    placeholder="Insert email"
+                    isError={touched.email && errors.email}
+                    onBlur={() => setFieldTouched("email")}
+                    onChangeText={handleChange("email")}
+                  />
+                  {touched.email && errors.email && (
+                    <Text
+                      style={{
+                        ...TYPHOGRAPHY.GothamLight,
+                        color: COLORS.red.lighter,
+                        marginTop: 5,
+                      }}>
+                      {errors.email}
+                    </Text>
+                  )}
+                </View>
 
-              <View style={{ marginVertical: 5 }}>
-                <TextInput
-                  label="Email"
-                  value={values?.email}
-                  placeholder="Insert email"
-                  isError={touched.email && errors.email}
-                  onBlur={() => setFieldTouched("email")}
-                  onChangeText={handleChange("email")}
-                />
-                {touched.email && errors.email && (
-                  <Text
-                    style={{
-                      ...TYPHOGRAPHY.GothamLight,
-                      color: COLORS.red.lighter,
-                      marginTop: 5,
-                    }}>
-                    {errors.email}
-                  </Text>
-                )}
-              </View>
+                <View style={{ marginVertical: 5 }}>
+                  <DatePicker
+                    label={values?.born}
+                    handleConfirm={(value: any) => {
+                      setFieldValue("born", value);
+                      _hideDatePicker();
+                    }}
+                    isError={Boolean(touched.born && errors.born)}
+                    onBlur={() => setFieldTouched("born")}
+                    isDatePickerVisible={isDatePickerVisible}
+                    mode="date"
+                    hideDatePicker={_hideDatePicker}
+                    openDatePicker={() => setDatePickerVisibility(true)}
+                  />
+                  {Boolean(touched.born && errors.born) && (
+                    <Text
+                      style={{
+                        ...TYPHOGRAPHY.GothamLight,
+                        color: COLORS.red.lighter,
+                        marginTop: 5,
+                      }}>
+                      {errors.born}
+                    </Text>
+                  )}
+                </View>
 
-              <View style={{ marginVertical: 5 }}>
-                <DatePicker
-                  label={values?.born}
-                  handleConfirm={(value: any) => {
-                    setFieldValue("born", value);
-                    _hideDatePicker();
-                  }}
-                  isError={Boolean(touched.born && errors.born)}
-                  onBlur={() => setFieldTouched("born")}
-                  isDatePickerVisible={isDatePickerVisible}
-                  mode="date"
-                  hideDatePicker={_hideDatePicker}
-                  openDatePicker={() => setDatePickerVisibility(true)}
-                />
-                {Boolean(touched.born && errors.born) && (
-                  <Text
-                    style={{
-                      ...TYPHOGRAPHY.GothamLight,
-                      color: COLORS.red.lighter,
-                      marginTop: 5,
-                    }}>
-                    {errors.born}
-                  </Text>
-                )}
-              </View>
+                <View style={{ marginVertical: 5 }}>
+                  <TextInput
+                    label="Bio"
+                    value={values?.bio}
+                    placeholder="Insert bio"
+                    multiline
+                    height={120}
+                    isError={touched.bio && errors.bio}
+                    onBlur={() => setFieldTouched("bio")}
+                    onChangeText={handleChange("bio")}
+                  />
+                  {Boolean(touched.bio && errors.bio) && (
+                    <Text
+                      style={{
+                        ...TYPHOGRAPHY.GothamLight,
+                        color: COLORS.red.lighter,
+                        marginTop: 5,
+                      }}>
+                      {errors.bio}
+                    </Text>
+                  )}
+                </View>
+              </KeyboardAwareScrollView>
 
-              <View style={{ marginVertical: 5 }}>
-                <TextInput
-                  label="Bio"
-                  value={values?.bio}
-                  placeholder="Insert bio"
-                  multiline
-                  height={120}
-                  isError={touched.bio && errors.bio}
-                  onBlur={() => setFieldTouched("bio")}
-                  onChangeText={handleChange("bio")}
-                />
-                {Boolean(touched.bio && errors.bio) && (
-                  <Text
-                    style={{
-                      ...TYPHOGRAPHY.GothamLight,
-                      color: COLORS.red.lighter,
-                      marginTop: 5,
-                    }}>
-                    {errors.bio}
-                  </Text>
-                )}
-              </View>
-            </KeyboardAwareScrollView>
+              {emptyPhoto !== "" && (
+                <Text
+                  style={{
+                    ...TYPHOGRAPHY.GothamRegular,
+                    color: COLORS.red.main,
+                    textAlign: "center",
+                  }}>
+                  {emptyPhoto}
+                </Text>
+              )}
 
-            <View>
-              <Button
-                mode="contained"
-                loading={contactState?.addContact?.isLoading}
-                onPress={handleSubmit}
-                style={{ marginVertical: 10 }}
-                color={COLORS.green.main}>
-                <Text style={{ color: COLORS.white.main }}>Add Contact</Text>
-              </Button>
-            </View>
-          </>
-        )}
-      </Formik>
+              <View>
+                <Button
+                  mode="contained"
+                  loading={contactState?.addContact?.isLoading}
+                  onPress={handleSubmit}
+                  style={{ marginVertical: 10 }}
+                  color={COLORS.green.main}>
+                  <Text style={{ color: COLORS.white.main }}>Add Contact</Text>
+                </Button>
+              </View>
+            </>
+          )}
+        </Formik>
+      </ScrollView>
 
       {/* Modal Success Update profile */}
       <View>

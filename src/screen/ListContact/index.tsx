@@ -1,5 +1,13 @@
 import React from "react";
-import { View, SafeAreaView, Text, Image, FlatList } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  Text,
+  Image,
+  FlatList,
+  Platform,
+  UIManager,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FAB } from "react-native-paper";
 import Modal from "react-native-modal";
@@ -12,13 +20,21 @@ import { CardList, ModalConfirmation } from "../../component/molecul";
 import { LoadingList } from "../../component/atom";
 import { COLORS, TYPHOGRAPHY } from "../../config";
 import { RFPercentage } from "../../utils";
+import { useHandleScroll } from "../../hook";
 
 import styles from "./styles";
+
+if (Platform.OS === "android") {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const ListContact = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const contactState = useSelector((state: Reducers) => state.contact);
+  const { handleScroll, showButton } = useHandleScroll();
 
   const [isModalDetail, setModalDetail] = React.useState<boolean>(false);
   const [dataSelected, setDataSelected] = React.useState<any>(null);
@@ -81,13 +97,33 @@ const ListContact = () => {
   }, [dataSelected?.email, dispatch]);
 
   return (
-    <SafeAreaView>
-      <FAB
-        icon="plus"
-        style={styles.fab}
-        label="Add Contact"
-        onPress={() => navigation.navigate("AddContact" as never)}
-      />
+    <SafeAreaView style={{ flex: 1 }}>
+      {showButton && (
+        <FAB
+          icon="plus"
+          style={styles.fab}
+          label="Add Contact"
+          onPress={() => navigation.navigate("AddContact" as never)}
+        />
+      )}
+
+      {showButton && (
+        <View style={styles.header}>
+          <View style={{ marginHorizontal: 10 }}>
+            <Text
+              style={{
+                ...TYPHOGRAPHY.GothamLargeBold,
+                color: COLORS.white.main,
+              }}>
+              List My Contact
+            </Text>
+            <Text
+              style={{ ...TYPHOGRAPHY.GothamLight, color: COLORS.white.main }}>
+              You Can Edit, Delete, Update your contact
+            </Text>
+          </View>
+        </View>
+      )}
 
       {contactState?.listContact?.isLoading ? (
         <View
@@ -101,8 +137,10 @@ const ListContact = () => {
         <FlatList
           data={contactState?.listContact?.data}
           renderItem={_renderItem}
+          contentContainerStyle={{ zIndex: 1, paddingTop: 70 }}
+          onScroll={handleScroll}
           ListEmptyComponent={_noSurvey}
-          keyExtractor={(item, index) => String(index)}
+          keyExtractor={(_, index) => String(index)}
         />
       )}
 
@@ -121,7 +159,9 @@ const ListContact = () => {
       {/* Modal Detail */}
       <Modal
         isVisible={isModalDetail}
-        animationIn="fadeInUp"
+        animationIn="zoomInUp"
+        animationInTiming={500}
+        animationOutTiming={500}
         useNativeDriver={true}
         onBackdropPress={() => setModalDetail(false)}
         onBackButtonPress={() => setModalDetail(false)}

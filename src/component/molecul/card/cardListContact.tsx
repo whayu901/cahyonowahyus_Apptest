@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
     padding: 10,
+    zIndex: 1,
   },
   imageProfile: {
     width: 80,
