@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     backgroundColor: COLORS.green.main,
-    paddingTop: isIphoneX() ? 50 : 25,
+    paddingTop: IS_ANDROID ? StatusBar.currentHeight : isIphoneX() ? 10 : 15,
     paddingBottom: IS_ANDROID ? 10 : 10,
   },
   titleHeader: {

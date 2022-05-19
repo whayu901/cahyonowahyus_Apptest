@@ -43,6 +43,7 @@ export default (state = initialState, { type, payload }: Action) => {
         },
       };
     }
+
     case "GET_CONTACT_ERROR": {
       return {
         ...state,

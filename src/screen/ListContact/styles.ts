@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 import { COLORS } from "../../config";
 
@@ -24,10 +24,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: 115,
+    height: Platform.OS === "ios" ? 150 : 115,
     backgroundColor: COLORS.blue.main,
     zIndex: 1000,
     elevation: 1000,
+    paddingTop: Platform.OS === "ios" ? 45 : 10,
   },
 });
 

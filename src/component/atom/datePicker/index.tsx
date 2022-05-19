@@ -61,6 +61,7 @@ const DatePickerGeneral = ({
           borderRadius: 10,
           backgroundColor: COLORS.grey.light,
           borderWidth: isDatePickerVisible ? 1.5 : 1,
+          justifyContent: "center",
           borderColor: isError
             ? COLORS.red.lighter
             : isDatePickerVisible
@@ -71,7 +72,6 @@ const DatePickerGeneral = ({
           style={{
             marginLeft: 15,
             marginRight: 15,
-            marginTop: width >= 500 ? 20 : width >= 375 ? 15 : 8,
           }}>
           <Text
             style={{

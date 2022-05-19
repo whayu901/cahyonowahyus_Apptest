@@ -167,6 +167,7 @@ const ListContact = () => {
         </View>
       ) : (
         <FlatList
+          bounces={false}
           data={contactState?.listContact?.data}
           renderItem={_renderItem}
           contentContainerStyle={{ paddingTop: 115 }}

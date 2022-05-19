@@ -81,7 +81,7 @@ const Input = ({
         }}>
         <View
           style={{
-            height: height,
+            height: height ? height : RFPercentage(11),
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
@@ -109,7 +109,6 @@ const Input = ({
               color: !enabled ? COLORS.black.lighter : COLORS.black.main,
               height: height,
               flex: 1,
-
               fontFamily: FONTS.GothamMedium,
               textAlignVertical: height ? "top" : "auto",
             }}

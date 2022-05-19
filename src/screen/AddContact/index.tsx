@@ -215,7 +215,7 @@ const AddContact = () => {
                     value={values?.bio}
                     placeholder="Insert bio"
                     multiline
-                    height={120}
+                    height={150}
                     isError={touched.bio && errors.bio}
                     onBlur={() => setFieldTouched("bio")}
                     onChangeText={handleChange("bio")}
