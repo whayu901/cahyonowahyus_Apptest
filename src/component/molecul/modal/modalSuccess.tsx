@@ -54,6 +54,7 @@ const style = StyleSheet.create({
     alignItems: "center",
     alignSelf: "center",
     justifyContent: "center",
+    width: "90%",
   },
   insideModal: {
     backgroundColor: COLORS.white.main,

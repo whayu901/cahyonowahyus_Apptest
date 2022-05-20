@@ -17,7 +17,11 @@ import dayjs from "dayjs";
 
 import { Reducers } from "../../redux/types";
 import { getContact, deleteContact, searchContact } from "../../redux/actions";
-import { CardList, ModalConfirmation } from "../../component/molecul";
+import {
+  CardList,
+  ModalConfirmation,
+  ModalSuccess,
+} from "../../component/molecul";
 import { LoadingList } from "../../component/atom";
 import { COLORS, TYPHOGRAPHY } from "../../config";
 import { RFPercentage } from "../../utils";
@@ -42,6 +46,7 @@ const ListContact = () => {
   const [isModalConfirmation, setModalConfirmation] =
     React.useState<boolean>(false);
   const [searchQuery, setSearchQuery] = React.useState<string>("");
+  const [isDeleteSuccess, setDeleteSuccess] = React.useState<boolean>(false);
 
   React.useEffect(() => {
     _callData();
@@ -103,19 +108,15 @@ const ListContact = () => {
         callback: () => {
           setModalConfirmation(false);
           setModalDetail(false);
+          setTimeout(() => {
+            setDeleteSuccess(true);
+          }, 1000);
         },
       }),
     );
   }, [dataSelected?.email, dispatch]);
 
   const onChangeSearch = (query: any) => {
-    // const tempData = null;
-    // contactState?.listContact?.data.filter((val: any) => {
-    //   if (val.name.toLowerCase().includes(query.toLowerCase())) {
-    //     console.log("ada bro");
-    //   }
-    // });
-
     setSearchQuery(query);
     dispatch<any>(searchContact({ text: query }));
   };
@@ -176,6 +177,14 @@ const ListContact = () => {
           keyExtractor={(_, index) => String(index)}
         />
       )}
+
+      {/* Modal Success delete */}
+      <ModalSuccess
+        isVisible={isDeleteSuccess}
+        textButton="Back To List"
+        message="Success Delete Data"
+        onDismis={() => setDeleteSuccess(false)}
+      />
 
       {/* Modal Confirmation delete */}
       <ModalConfirmation
