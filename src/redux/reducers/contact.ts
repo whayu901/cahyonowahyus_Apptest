@@ -77,6 +77,9 @@ export default (state = initialState, { type, payload }: Action) => {
           data: state.listContact.data.filter(
             item => item.email !== payload?.email,
           ),
+          dataTemp: state.listContact.data.filter(
+            item => item.email !== payload?.email,
+          ),
         },
       };
     }
@@ -120,6 +123,7 @@ export default (state = initialState, { type, payload }: Action) => {
           ...state.listContact,
           isLoading: false,
           data: newUsers,
+          dataTemp: newUsers,
         },
       };
     }
@@ -155,6 +159,7 @@ export default (state = initialState, { type, payload }: Action) => {
           ...state.listContact,
           isLoading: false,
           data: newUsers,
+          dataTemp: newUsers,
         },
       };
     }
