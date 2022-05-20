@@ -26,7 +26,7 @@ Delete Contact
 
 ### Installation
 
-Clone this [repo](https://github.com/TaufanP/mobile-test) then open the directory with your terminal by executing
+Clone this [repo](https://github.com/whayu901/mobile-test) then open the directory with your terminal by executing
 
 ```
 git clone https://github.com/whayu901/mobile-test.git

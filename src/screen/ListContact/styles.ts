@@ -24,11 +24,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     top: 0,
-    height: Platform.OS === "ios" ? 150 : 115,
+    height: Platform.OS === "ios" ? 150 : 120,
     backgroundColor: COLORS.blue.main,
     zIndex: 1000,
     elevation: 1000,
-    paddingTop: Platform.OS === "ios" ? 45 : 10,
+    paddingTop: Platform.OS === "ios" ? 45 : 20,
   },
 });
 

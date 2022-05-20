@@ -171,7 +171,7 @@ const ListContact = () => {
           bounces={false}
           data={contactState?.listContact?.data}
           renderItem={_renderItem}
-          contentContainerStyle={{ paddingTop: 115 }}
+          contentContainerStyle={{ paddingTop: 120 }}
           onScroll={handleScroll}
           ListEmptyComponent={_noSurvey}
           keyExtractor={(_, index) => String(index)}
