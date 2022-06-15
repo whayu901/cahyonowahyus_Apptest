@@ -37,8 +37,8 @@ if (Platform.OS === "android") {
 
 const ListContact = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation();
   const contactState = useSelector((state: Reducers) => state.contact);
+  const navigation = useNavigation();
   const { handleScroll, showButton } = useHandleScroll();
 
   const [isModalDetail, setModalDetail] = React.useState<boolean>(false);
