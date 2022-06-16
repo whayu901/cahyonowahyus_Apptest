@@ -26,7 +26,7 @@ const CardListContact = ({ onPress, data }: Props) => {
         </View>
         <View style={{ marginLeft: 15 }}>
           <Text style={{ ...TYPHOGRAPHY.GothamSemiLargeBold }}>
-            {data?.name}
+            {`${data?.firstName} ${data?.lastName}`}
           </Text>
           <Text style={{ ...TYPHOGRAPHY.GothamLight }}>{data?.email}</Text>
         </View>
@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   imageProfile: {
-    width: 80,
+    width: 120,
     height: 80,
-    borderRadius: 50,
+    borderRadius: 10,
   },
 });
 

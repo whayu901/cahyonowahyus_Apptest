@@ -15,7 +15,7 @@ import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Entypo";
 import { launchImageLibrary } from "react-native-image-picker";
 
-import { TextInput, DatePicker } from "../../component/atom";
+import { TextInput } from "../../component/atom";
 import { ModalSuccess, HeaderGeneral } from "../../component/molecul";
 import { COLORS, TYPHOGRAPHY } from "../../config";
 import { RFPercentage } from "../../utils";
@@ -26,10 +26,10 @@ import { validationUpdateContact } from "../../helpers";
 import styles from "./styles";
 
 interface IContactForm {
-  name: string;
-  bio: string;
-  email: string;
-  born: any;
+  lastName: string;
+  firstName: string;
+  age: string;
+  photo?: any;
 }
 
 const AddContact = () => {
@@ -38,13 +38,12 @@ const AddContact = () => {
   const contactState = useSelector((state: Reducers) => state.contact);
 
   const [form] = React.useState<IContactForm>({
-    bio: "",
-    name: "",
-    email: "",
-    born: "",
+    lastName: "",
+    firstName: "",
+    age: "",
+    photo: "",
   });
-  const [isDatePickerVisible, setDatePickerVisibility] =
-    React.useState<boolean>(false);
+
   const [visibleModalSuccess, setVisibleModalSuccess] =
     React.useState<boolean>(false);
   const [photo, setPhoto] = React.useState<any>(null);
@@ -57,6 +56,7 @@ const AddContact = () => {
       } else {
         setEmptyPhoto("");
         value.photo = photo;
+        value.age = Number(value.age);
 
         dispatch<any>(
           addContact({
@@ -70,10 +70,6 @@ const AddContact = () => {
     },
     [dispatch, photo],
   );
-
-  const _hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
 
   const _dismissModalSuccess = () => {
     setVisibleModalSuccess(false);
@@ -114,7 +110,6 @@ const AddContact = () => {
             handleChange,
             touched,
             handleSubmit,
-            setFieldValue,
           }) => (
             <>
               <KeyboardAwareScrollView
@@ -143,91 +138,64 @@ const AddContact = () => {
 
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="FullName"
-                    value={values?.name}
+                    label="FirstName"
+                    value={values?.firstName}
                     placeholder="Insert name"
-                    isError={touched.name && errors.name}
-                    onBlur={() => setFieldTouched("name")}
-                    onChangeText={handleChange("name")}
+                    isError={touched.firstName && errors.firstName}
+                    onBlur={() => setFieldTouched("firstName")}
+                    onChangeText={handleChange("firstName")}
                   />
-                  {touched.name && errors.name && (
+                  {touched.firstName && errors.firstName && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.name}
+                      {errors.firstName}
                     </Text>
                   )}
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="Email"
-                    value={values?.email}
-                    placeholder="Insert email"
-                    isError={touched.email && errors.email}
-                    onBlur={() => setFieldTouched("email")}
-                    onChangeText={handleChange("email")}
+                    label="LastName"
+                    value={values?.lastName}
+                    placeholder="Insert name"
+                    isError={touched.lastName && errors.lastName}
+                    onBlur={() => setFieldTouched("lastName")}
+                    onChangeText={handleChange("lastName")}
                   />
-                  {touched.email && errors.email && (
+                  {touched.lastName && errors.lastName && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.email}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={{ marginVertical: 5 }}>
-                  <DatePicker
-                    label={values?.born}
-                    handleConfirm={(value: any) => {
-                      setFieldValue("born", value);
-                      _hideDatePicker();
-                    }}
-                    isError={Boolean(touched.born && errors.born)}
-                    onBlur={() => setFieldTouched("born")}
-                    isDatePickerVisible={isDatePickerVisible}
-                    mode="date"
-                    hideDatePicker={_hideDatePicker}
-                    openDatePicker={() => setDatePickerVisibility(true)}
-                  />
-                  {Boolean(touched.born && errors.born) && (
-                    <Text
-                      style={{
-                        ...TYPHOGRAPHY.GothamLight,
-                        color: COLORS.red.lighter,
-                        marginTop: 5,
-                      }}>
-                      {errors.born}
+                      {errors.lastName}
                     </Text>
                   )}
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="Bio"
-                    value={values?.bio}
-                    placeholder="Insert bio"
-                    multiline
-                    height={150}
-                    isError={touched.bio && errors.bio}
-                    onBlur={() => setFieldTouched("bio")}
-                    onChangeText={handleChange("bio")}
+                    label="Age"
+                    value={String(values?.age)}
+                    keyboardType="number-pad"
+                    placeholder="Insert Age"
+                    isError={touched.age && errors.age}
+                    onBlur={() => setFieldTouched("age")}
+                    onChangeText={handleChange("age")}
                   />
-                  {Boolean(touched.bio && errors.bio) && (
+                  {touched.age && errors.age && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.bio}
+                      {errors.age}
                     </Text>
                   )}
                 </View>

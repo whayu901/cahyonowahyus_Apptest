@@ -6,23 +6,19 @@ MailBook is a contact organizer application. You can store various info about yo
 
 Screen List Contact
 
-![Screenshot_1652885560](https://user-images.githubusercontent.com/32776398/169071670-c31aaa2d-4d11-4974-82f7-04c7c9820e73.png)
+![Screenshot_1655398302](https://user-images.githubusercontent.com/32776398/174125109-25b074b5-aa81-4bdc-a9b2-12c4950c1a25.png)
 
 Screen Detail Contact
 
-![Screenshot_1652885578](https://user-images.githubusercontent.com/32776398/169080780-70f3dcc1-d3d3-4fc6-8129-ced17997156d.png)
+![Screenshot_1655398312](https://user-images.githubusercontent.com/32776398/174125180-30c135ec-6363-4989-aaf0-0c3ae4c84704.png)
 
-Screen Update Contact
+Screen Update & Delete Contact
 
 ![Screenshot_1652885581](https://user-images.githubusercontent.com/32776398/169081085-8a9dace8-4246-4700-a79b-0e4a700c61c4.png)
 
 Screen Add Contact
 
-![Screenshot_1652885572](https://user-images.githubusercontent.com/32776398/169081481-6ac1c868-c888-4c2a-9f67-6ce5f3add9fe.png)
-
-Delete Contact
-
-![Screenshot_1652885587](https://user-images.githubusercontent.com/32776398/169081807-e319658d-ed96-4137-9250-dfbe6aa677b4.png)
+![Screenshot_1655398305](https://user-images.githubusercontent.com/32776398/174125317-0e97f3f5-d873-451a-9005-978f6453c688.png)
 
 ### Installation
 

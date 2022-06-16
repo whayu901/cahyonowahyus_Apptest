@@ -1,4 +1,5 @@
 import { Action, ContactState } from "../types";
+import { applySortFilter } from "../../helpers";
 
 const initialState: ContactState = {
   listContact: {
@@ -69,16 +70,13 @@ export default (state = initialState, { type, payload }: Action) => {
         deleteContact: {
           ...state.deleteContact,
           isLoading: false,
-          data: payload?.data,
         },
         listContact: {
           ...state.listContact,
           isLoading: false,
-          data: state.listContact.data.filter(
-            item => item.email !== payload?.email,
-          ),
+          data: state.listContact.data.filter(item => item.id !== payload?.id),
           dataTemp: state.listContact.data.filter(
-            item => item.email !== payload?.email,
+            item => item.id !== payload?.id,
           ),
         },
       };
@@ -105,11 +103,14 @@ export default (state = initialState, { type, payload }: Action) => {
     case "UPDATE_CONTACT_SUCCESS": {
       const tempUsers = [...state.listContact.data];
       const newUsers = tempUsers.map((item, index) => {
-        if (item.email !== payload?.data.email) {
+        if (item.id !== payload?.id) {
           return item;
         }
-        if (item.email === payload?.data.email) {
-          return payload?.data;
+        if (item.id === payload?.id) {
+          const data = payload?.data;
+          data.id = payload?.id;
+
+          return data;
         }
       });
       return {
@@ -147,19 +148,11 @@ export default (state = initialState, { type, payload }: Action) => {
       };
     }
     case "ADD_CONTACT_SUCCESS": {
-      const newUsers = [...state.listContact.data, payload?.data];
       return {
         ...state,
         addContact: {
           ...state.addContact,
           isLoading: false,
-          data: payload?.data,
-        },
-        listContact: {
-          ...state.listContact,
-          isLoading: false,
-          data: newUsers,
-          dataTemp: newUsers,
         },
       };
     }
@@ -174,9 +167,10 @@ export default (state = initialState, { type, payload }: Action) => {
       };
     }
     case "SEARCH_CONTACT_SUCCESS": {
-      const newUsers: any[] = state.listContact.data.filter(val => {
-        return val?.name.toLowerCase().includes(payload?.text?.toLowerCase());
-      });
+      const newUsers: any[] = applySortFilter(
+        state.listContact.data,
+        payload?.text?.toLocaleLowerCase(),
+      );
 
       return {
         ...state,

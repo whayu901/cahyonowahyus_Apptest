@@ -11,12 +11,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { Button } from "react-native-paper";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import dayjs from "dayjs";
 import { Formik } from "formik";
 import Icon from "react-native-vector-icons/Entypo";
 import { launchImageLibrary } from "react-native-image-picker";
 
-import { TextInput, DatePicker } from "../../component/atom";
+import { TextInput } from "../../component/atom";
 import { ModalSuccess, HeaderGeneral } from "../../component/molecul";
 import { COLORS, TYPHOGRAPHY } from "../../config";
 import { updateContact } from "../../redux/actions";
@@ -27,10 +26,10 @@ import { RFPercentage } from "../../utils";
 import styles from "./styles";
 
 interface IContactForm {
-  name: string;
-  bio: string;
-  email: string;
-  born: string;
+  lastName: string;
+  firstName: string;
+  age: string;
+  photo?: any;
 }
 
 const UpdateContact = () => {
@@ -40,13 +39,12 @@ const UpdateContact = () => {
   const contactState = useSelector((state: Reducers) => state.contact);
 
   const [form, setForm] = React.useState<IContactForm>({
-    bio: "",
-    name: "",
-    email: "",
-    born: "",
+    lastName: "",
+    firstName: "",
+    age: "",
+    photo: "",
   });
-  const [isDatePickerVisible, setDatePickerVisibility] =
-    React.useState<boolean>(false);
+
   const [visibleModalSuccess, setVisibleModalSuccess] =
     React.useState<boolean>(false);
   const [photo, setPhoto] = React.useState<any>(null);
@@ -54,17 +52,15 @@ const UpdateContact = () => {
   React.useEffect(() => {
     setForm((prevState: any) => ({
       ...prevState,
-      bio: route?.params?.data?.bio,
-      name: route?.params?.data?.name,
-      email: route?.params?.data?.email,
-      born: dayjs(route?.params?.data?.born).toDate(),
+      lastName: route?.params?.data?.lastName,
+      firstName: route?.params?.data?.firstName,
+      age: route?.params?.data?.age,
     }));
     setPhoto(route?.params?.data?.photo);
   }, [
-    route?.params?.data?.bio,
-    route?.params?.data?.born,
-    route?.params?.data?.email,
-    route?.params?.data?.name,
+    route?.params?.data?.age,
+    route?.params?.data?.firstName,
+    route?.params?.data?.lastName,
     route?.params?.data?.photo,
   ]);
 
@@ -84,22 +80,20 @@ const UpdateContact = () => {
   const _updateContact = React.useCallback(
     (value: any) => {
       value.photo = photo;
+      value.age = Number(value.age);
 
       dispatch<any>(
         updateContact({
           data: value,
+          id: route?.params?.data?.id,
           callback: () => {
             setVisibleModalSuccess(true);
           },
         }),
       );
     },
-    [dispatch, photo],
+    [dispatch, photo, route?.params?.data?.id],
   );
-
-  const _hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
 
   const _dismissModalSuccess = () => {
     setVisibleModalSuccess(false);
@@ -125,7 +119,6 @@ const UpdateContact = () => {
             handleChange,
             touched,
             handleSubmit,
-            setFieldValue,
           }) => (
             <>
               <KeyboardAwareScrollView
@@ -153,91 +146,64 @@ const UpdateContact = () => {
                 </View>
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="FullName"
-                    value={values?.name}
+                    label="FirstName"
+                    value={values?.firstName}
                     placeholder="Insert name"
-                    isError={touched.name && errors.name}
-                    onBlur={() => setFieldTouched("name")}
-                    onChangeText={handleChange("name")}
+                    isError={touched.firstName && errors.firstName}
+                    onBlur={() => setFieldTouched("firstName")}
+                    onChangeText={handleChange("firstName")}
                   />
-                  {touched.name && errors.name && (
+                  {touched.firstName && errors.firstName && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.name}
+                      {errors.firstName}
                     </Text>
                   )}
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="Email"
-                    value={values?.email}
-                    placeholder="Insert email"
-                    isError={touched.email && errors.email}
-                    onBlur={() => setFieldTouched("email")}
-                    onChangeText={handleChange("email")}
+                    label="LastName"
+                    value={values?.lastName}
+                    placeholder="Insert name"
+                    isError={touched.lastName && errors.lastName}
+                    onBlur={() => setFieldTouched("lastName")}
+                    onChangeText={handleChange("lastName")}
                   />
-                  {touched.email && errors.email && (
+                  {touched.lastName && errors.lastName && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.email}
-                    </Text>
-                  )}
-                </View>
-
-                <View style={{ marginVertical: 5 }}>
-                  <DatePicker
-                    label={values?.born}
-                    handleConfirm={(value: any) => {
-                      setFieldValue("born", value);
-                      _hideDatePicker();
-                    }}
-                    isError={Boolean(touched.born && errors.born)}
-                    onBlur={() => setFieldTouched("born")}
-                    isDatePickerVisible={isDatePickerVisible}
-                    mode="date"
-                    hideDatePicker={_hideDatePicker}
-                    openDatePicker={() => setDatePickerVisibility(true)}
-                  />
-                  {Boolean(touched.born && errors.born) && (
-                    <Text
-                      style={{
-                        ...TYPHOGRAPHY.GothamLight,
-                        color: COLORS.red.lighter,
-                        marginTop: 5,
-                      }}>
-                      {errors.born}
+                      {errors.lastName}
                     </Text>
                   )}
                 </View>
 
                 <View style={{ marginVertical: 5 }}>
                   <TextInput
-                    label="Bio"
-                    value={values?.bio}
-                    placeholder="Insert bio"
-                    multiline
-                    height={120}
-                    isError={touched.bio && errors.bio}
-                    onBlur={() => setFieldTouched("bio")}
-                    onChangeText={handleChange("bio")}
+                    label="Age"
+                    value={String(values?.age)}
+                    keyboardType="number-pad"
+                    placeholder="Insert Age"
+                    isError={touched.age && errors.age}
+                    onBlur={() => setFieldTouched("age")}
+                    onChangeText={handleChange("age")}
                   />
-                  {Boolean(touched.bio && errors.bio) && (
+                  {touched.age && errors.age && (
                     <Text
                       style={{
                         ...TYPHOGRAPHY.GothamLight,
                         color: COLORS.red.lighter,
                         marginTop: 5,
                       }}>
-                      {errors.bio}
+                      {errors.age}
                     </Text>
                   )}
                 </View>

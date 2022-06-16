@@ -11,9 +11,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { Button, FAB, Searchbar } from "react-native-paper";
 import Modal from "react-native-modal";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import dayjs from "dayjs";
 
 import { Reducers } from "../../redux/types";
 import { getContact, deleteContact, searchContact } from "../../redux/actions";
@@ -48,16 +47,18 @@ const ListContact = () => {
   const [searchQuery, setSearchQuery] = React.useState<string>("");
   const [isDeleteSuccess, setDeleteSuccess] = React.useState<boolean>(false);
 
-  React.useEffect(() => {
-    _callData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      _callData();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   const _callData = React.useCallback(() => {
-    if (contactState.listContact.data.length === 0) {
-      dispatch<any>(getContact());
-    }
-  }, [contactState.listContact.data.length, dispatch]);
+    // if (contactState.listContact.data.length === 0) {
+    dispatch<any>(getContact());
+    // }
+  }, [dispatch]);
 
   const _renderItem = React.useCallback(
     ({ item }: { item: any }) => (
@@ -104,7 +105,7 @@ const ListContact = () => {
   const _deleteContact = React.useCallback(() => {
     dispatch<any>(
       deleteContact({
-        email: dataSelected?.email,
+        id: dataSelected?.id,
         callback: () => {
           setModalConfirmation(false);
           setModalDetail(false);
@@ -114,7 +115,7 @@ const ListContact = () => {
         },
       }),
     );
-  }, [dataSelected?.email, dispatch]);
+  }, [dataSelected?.id, dispatch]);
 
   const onChangeSearch = (query: any) => {
     setSearchQuery(query);
@@ -161,7 +162,7 @@ const ListContact = () => {
       {contactState?.listContact?.isLoading ? (
         <View
           style={{
-            marginVertical: RFPercentage(2),
+            paddingTop: 120,
             marginHorizontal: 10,
           }}>
           <LoadingList />
@@ -190,7 +191,7 @@ const ListContact = () => {
       <ModalConfirmation
         isVisible={isModalConfirmation}
         typeButton="contained"
-        message={`Are you sure delete ${dataSelected?.name}`}
+        message={`Are you sure delete ${dataSelected?.firstName} ${dataSelected?.lastName}`}
         textButton="Delete"
         textButtonNegatif="Cancel"
         onDismis={_deleteContact}
@@ -219,55 +220,37 @@ const ListContact = () => {
             borderTopStartRadius: RFPercentage(3),
             padding: 10,
           }}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <View>
-              <Image
-                style={styles.imageProfile}
-                source={{
-                  uri: dataSelected?.photo,
-                }}
-                resizeMode="contain"
-              />
-            </View>
-            <View style={{ marginLeft: 15 }}>
-              <Text
-                style={{
-                  ...TYPHOGRAPHY.GothamLargeBold,
-                  color: COLORS.white.main,
-                }}>
-                {dataSelected?.name}
-              </Text>
-              <Text
-                style={{
-                  ...TYPHOGRAPHY.GothamLight,
-                  color: COLORS.white.main,
-                }}>
-                {dayjs(dataSelected?.born).format("D MMM YYYY")}
-              </Text>
-              <Text
-                style={{
-                  ...TYPHOGRAPHY.GothamLight,
-                  color: COLORS.white.main,
-                }}>
-                {dataSelected?.email}
-              </Text>
-            </View>
+          <View style={{ alignItems: "center", marginVertical: 20 }}>
+            <Image
+              style={styles.imageProfile}
+              source={{
+                uri: dataSelected?.photo,
+              }}
+              resizeMode="contain"
+            />
           </View>
 
-          <View style={{ marginVertical: 10 }}>
+          <View style={{ marginLeft: 15 }}>
             <Text
               style={{
-                ...TYPHOGRAPHY.GothamSemiLargeBold,
+                ...TYPHOGRAPHY.GothamLargeBold,
                 color: COLORS.white.main,
               }}>
-              Biography
+              {`${dataSelected?.firstName} ${dataSelected?.lastName}`}
             </Text>
             <Text
               style={{
-                ...TYPHOGRAPHY.GothamRegular,
+                ...TYPHOGRAPHY.GothamLight,
                 color: COLORS.white.main,
               }}>
-              {dataSelected?.bio}
+              {`Age: ${dataSelected?.age} Years`}
+            </Text>
+            <Text
+              style={{
+                ...TYPHOGRAPHY.GothamLight,
+                color: COLORS.white.main,
+              }}>
+              {dataSelected?.email}
             </Text>
           </View>
 

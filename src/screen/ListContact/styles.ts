@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageProfile: {
-    width: 120,
+    width: "100%",
     height: 120,
     borderRadius: 10,
   },

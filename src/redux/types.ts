@@ -1,7 +1,7 @@
 interface Payload {
   data?: any;
   error?: any;
-  email?: string;
+  id?: string;
   text?: string;
 }
 
