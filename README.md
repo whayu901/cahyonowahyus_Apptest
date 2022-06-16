@@ -1,4 +1,4 @@
-# RGA Test CRUD Contact App
+# JENIUS Test CRUD Contact App
 
 MailBook is a contact organizer application. You can store various info about your contact. Easily maintainable, there are features like search contact, contact detail, create a new contact, delete contact, and update an existing contact.
 
@@ -14,7 +14,7 @@ Screen Detail Contact
 
 Screen Update & Delete Contact
 
-![Screenshot_1652885581](https://user-images.githubusercontent.com/32776398/169081085-8a9dace8-4246-4700-a79b-0e4a700c61c4.png)
+![Screenshot_1655398299](https://user-images.githubusercontent.com/32776398/174136014-bc5887a9-96ed-4149-8e10-ebdde39a6b56.png)
 
 Screen Add Contact
 
@@ -22,10 +22,10 @@ Screen Add Contact
 
 ### Installation
 
-Clone this [repo](https://github.com/whayu901/mobile-test) then open the directory with your terminal by executing
+Clone this [repo](https://github.com/whayu901/cahyonowahyus_Apptest.git) then open the directory with your terminal by executing
 
 ```
-git clone https://github.com/whayu901/mobile-test.git
+git clone https://github.com/whayu901/cahyonowahyus_Apptest.git
 ```
 
 ```
