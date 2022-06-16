@@ -29,7 +29,7 @@ git clone https://github.com/whayu901/cahyonowahyus_Apptest.git
 ```
 
 ```
-cd mobile-test
+cd cahyonowahyus_Apptest
 ```
 
 Install all the packages
